@@ -1,4 +1,5 @@
 from datetime import datetime
+import requests
 import speech_recognition as sr
 import sys
 import pyttsx3
@@ -116,6 +117,7 @@ def query_openai(prompt = ""):
     )
     return response.choices[0].text
 
+
 # Main loop
 if __name__ == '__main__':
     speak("All systems nominal.")
@@ -177,6 +179,21 @@ if __name__ == '__main__':
                 speak("Ok")
                 print(speech)
                 speak(speech)
+
+            # Weather
+            if query[0] == 'weather':
+                query.pop(0)
+                query = " ".join(query)
+                weather_data = requests.get(
+                    f'http://api.openweathermap.org/data/2.5/weather?q={query}&appid={os.environ["OPENWEATHER_API_KEY"]}&units=metric').json()
+
+                weather = weather_data['weather'][0]['main']
+                temp = round(weather_data['main']['temp'])
+
+                weather_output = f'The weather in {query} is {weather} with a temperature of {temp} degrees'
+
+                print(weather_output)
+                speak(weather_output)
 
             # Restart
             if query[0] == 'restart':
