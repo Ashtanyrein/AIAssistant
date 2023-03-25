@@ -181,9 +181,9 @@ if __name__ == '__main__':
                 speak(speech)
 
             # Weather
-            if query[0] == 'weather':
+            if query[0] == 'weather' and query[1] == 'in':
                 query.pop(0)
-                query = " ".join(query)
+                query = " ".join(query[1:])
                 weather_data = requests.get(
                     f'http://api.openweathermap.org/data/2.5/weather?q={query}&appid={os.environ["OPENWEATHER_API_KEY"]}&units=metric').json()
 
